@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "dtk-common-core"
   gem.require_paths = ["lib"]
-  gem.version       = DtkCommonCore::VERSION
+  gem.version       = "#{DtkCommonCore::VERSION}.#{ARGV[3]}".chomp(".")
 
   gem.add_dependency 'rest-client','~> 1.6.7'
 end
