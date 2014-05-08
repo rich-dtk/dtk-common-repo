@@ -159,16 +159,16 @@ module DTK
           def error_handling(opts={},&block)      
             begin
               block.call
+            rescue ::RestClient::ResourceNotFound, RestClient::Request::Unauthorized => e
+              # with latest set of changes we will consider this as special case since most of legacy code is expecting Response class
+              Response.new(StatusField => StatusNotok, ErrorsField => JSON.parse(e.response)['errors'])
             rescue ::RestClient::Forbidden => e
               return error_response({ErrorsSubFieldCode => RestClientErrors[e.class.to_s]||GenericError, ErrorsOriginalException => e},opts) unless e.inspect.to_s.include?("PG::Error")
 
               errors = {"code" => "pg_error", "message" => e.inspect.to_s.strip, ErrorsOriginalException => e}
               error_response(errors)
-            rescue ::RestClient::ServerBrokeConnection,::RestClient::InternalServerError,::RestClient::RequestTimeout,RestClient::Request::Unauthorized, Errno::ECONNREFUSED => e
+            rescue ::RestClient::ServerBrokeConnection,::RestClient::InternalServerError,::RestClient::RequestTimeout, Errno::ECONNREFUSED => e
               error_response({ErrorsSubFieldCode => RestClientErrors[e.class.to_s]||GenericError, ErrorsOriginalException => e},opts)
-            rescue ::RestClient::ResourceNotFound => e
-              errors = {"code" => RestClientErrors[e.class.to_s], "message" => e.to_s, ErrorsOriginalException => e}
-              error_response(errors)
             rescue Exception => e
               error_response({ErrorsSubFieldCode => e.class.to_s, ErrorsOriginalException => e},opts)
             end
