@@ -159,7 +159,7 @@ module DTK
           def error_handling(opts={},&block)      
             begin
               block.call
-            rescue ::RestClient::ResourceNotFound, RestClient::Request::Unauthorized => e
+            rescue ::RestClient::ResourceNotFound, RestClient::Request::Unauthorized, RestClient::BadRequest => e
               # with latest set of changes we will consider this as special case since most of legacy code is expecting Response class
               Response.new(StatusField => StatusNotok, ErrorsField => JSON.parse(e.response)['errors'])
             rescue ::RestClient::Forbidden => e
