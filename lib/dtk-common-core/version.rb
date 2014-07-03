@@ -1,3 +1,3 @@
 module DtkCommonCore
-  VERSION = "0.5.13"
+  VERSION = "0.5.12"
 end
