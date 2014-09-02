@@ -72,6 +72,10 @@ module DTK
         self[DataField]=data_values
       end
 
+      def set_data_hash(data_hash)
+        self[DataField]=data_hash
+      end
+
       def data_ret_and_remove!(*data_keys)
         data = data()
         data_keys.map{|key|data.delete(internal_key_form(key))}
@@ -85,7 +89,7 @@ module DTK
       def internal_key_form(key)
         key.to_s
       end
-      def external_key_form(key) 
+      def external_key_form(key)
         key.to_sym
       end
       private :internal_key_form,:external_key_form
@@ -103,7 +107,7 @@ module DTK
         end
       end
 
-      class RestClientWrapper 
+      class RestClientWrapper
         class << self
           include ResponseTokens
           def get_raw(url,body={},opts={},&block)
@@ -113,7 +117,7 @@ module DTK
               block ? block.call(raw_response) : raw_response
             end
           end
-        
+
           def get(url, body={}, opts={})
             get_raw(url,body, opts){|raw_response|Response.new(json_parse_if_needed(raw_response))}
           end
@@ -124,7 +128,7 @@ module DTK
               block ? block.call(raw_response) : raw_response
             end
           end
-          
+
           def delete_raw(url,body={},opts={},&block)
             error_handling(opts) do
               # DELETE method supports only query params
@@ -146,7 +150,7 @@ module DTK
             item.kind_of?(String) ? JSON.parse(item) : item
           end
          private
-          
+
           def generate_query_params_url(url, params_hash)
             if params_hash.empty?
               return url
@@ -156,7 +160,7 @@ module DTK
             end
           end
 
-          def error_handling(opts={},&block)      
+          def error_handling(opts={},&block)
             begin
               block.call
             rescue ::RestClient::ResourceNotFound, RestClient::Request::Unauthorized, RestClient::BadRequest,::RestClient::InternalServerError => e
@@ -172,13 +176,13 @@ module DTK
             rescue Exception => e
               error_response({ErrorsSubFieldCode => e.class.to_s, ErrorsOriginalException => e},opts)
             end
-          end 
+          end
 
           def error_response(error_or_errors,opts={})
             errors = error_or_errors.kind_of?(Hash) ? [error_or_errors] : error_or_errors
             (opts[:error_response_class]||Error).new(StatusField => StatusNotok, ErrorsField => errors)
           end
-          
+
           RestClientErrors = {
             "RestClient::Forbidden" => "forbidden",
             "RestClient::ServerBrokeConnection" => "broken",
