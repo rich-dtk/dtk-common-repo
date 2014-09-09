@@ -16,13 +16,29 @@ module DTK
     end
 
     module ResponseConstants
-      # since nil is serialized as "" wil substitute this in
-      NILTERM = '***NIL***'
+      # these trems dont get properly marshalled
+      NilTerm = '***NIL***'
+      BooleanTrue = '***TRUE***'
+      BooleanFalse = '***FALSE***'
     end
 
     class Response < Hash
       include ResponseTokens
-      include ResponseConstants
+
+      module Term
+        include ResponseConstants
+        def self.nil()
+          NilTerm
+        end
+        module Boolean
+          def self.true()
+            Term::BooleanTrue
+          end
+          def self.false()
+            Term::BooleanFalse
+          end
+        end
+      end
 
       def initialize(hash={})
         super()
@@ -30,10 +46,6 @@ module DTK
       end
       def ok?()
         self[StatusField] == StatusOK
-      end
-
-      def self.nil_term()
-        NILTERM
       end
 
       def validation_response?
