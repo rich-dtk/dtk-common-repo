@@ -15,14 +15,25 @@ module DTK
       GenericError = "error"
     end
 
+    module ResponseConstants
+      # since nil is serialized as "" wil substitute this in
+      NILTERM = '***NIL***'
+    end
+
     class Response < Hash
       include ResponseTokens
+      include ResponseConstants
+
       def initialize(hash={})
         super()
         replace(hash)
       end
       def ok?()
         self[StatusField] == StatusOK
+      end
+
+      def self.nil_term()
+        NILTERM
       end
 
       def validation_response?
