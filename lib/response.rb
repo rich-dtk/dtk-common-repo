@@ -197,7 +197,7 @@ module DTK
             rescue ::RestClient::ServerBrokeConnection,::RestClient::RequestTimeout, Errno::ECONNREFUSED => e
               error_response({ErrorsSubFieldCode => RestClientErrors[e.class.to_s]||GenericError, ErrorsOriginalException => e},opts)
             rescue Exception => e
-              error_response({ErrorsSubFieldCode => e.class.to_s, ErrorsOriginalException => e},opts)
+              error_response({ErrorsSubFieldCode => RestClientErrors[e.class.to_s], ErrorsOriginalException => e},opts)
             end
           end
 
