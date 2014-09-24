@@ -210,6 +210,7 @@ module DTK
             "RestClient::Forbidden" => "forbidden",
             "RestClient::ServerBrokeConnection" => "broken",
             "RestClient::Request::Unauthorized" => "unauthorized",
+            "RestClient::ServiceUnavailable" => "unavailable",
             "RestClient::InternalServerError" => "internal_server_error",
             "RestClient::RequestTimeout" => "timeout",
             "RestClient::ResourceNotFound" => "resource_not_found",
