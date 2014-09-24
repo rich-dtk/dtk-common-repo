@@ -187,16 +187,24 @@ module DTK
             begin
               block.call
             rescue ::RestClient::ResourceNotFound, RestClient::Request::Unauthorized, RestClient::BadRequest,::RestClient::InternalServerError => e
+              # DEBUG SNIPPET >>> REMOVE <<<
+              require (RUBY_VERSION.match(/1\.8\..*/) ? 'ruby-debug' : 'debugger');Debugger.start; debugger
               # with latest set of changes we will consider this as special case since most of legacy code is expecting Response class
               Response.new(StatusField => StatusNotok, ErrorsField => JSON.parse(e.response)['errors'])
             rescue ::RestClient::Forbidden => e
+              # DEBUG SNIPPET >>> REMOVE <<<
+              require (RUBY_VERSION.match(/1\.8\..*/) ? 'ruby-debug' : 'debugger');Debugger.start; debugger
               return error_response({ErrorsSubFieldCode => RestClientErrors[e.class.to_s]||GenericError, ErrorsOriginalException => e},opts) unless e.inspect.to_s.include?("PG::Error")
 
               errors = {"code" => "pg_error", "message" => e.inspect.to_s.strip, ErrorsOriginalException => e}
               error_response(errors)
             rescue ::RestClient::ServerBrokeConnection,::RestClient::RequestTimeout, Errno::ECONNREFUSED => e
+              # DEBUG SNIPPET >>> REMOVE <<<
+              require (RUBY_VERSION.match(/1\.8\..*/) ? 'ruby-debug' : 'debugger');Debugger.start; debugger
               error_response({ErrorsSubFieldCode => RestClientErrors[e.class.to_s]||GenericError, ErrorsOriginalException => e},opts)
             rescue Exception => e
+              # DEBUG SNIPPET >>> REMOVE <<<
+              require (RUBY_VERSION.match(/1\.8\..*/) ? 'ruby-debug' : 'debugger');Debugger.start; debugger
               error_response({ErrorsSubFieldCode => RestClientErrors[e.class.to_s], ErrorsOriginalException => e},opts)
             end
           end
