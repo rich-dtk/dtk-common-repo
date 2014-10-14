@@ -67,7 +67,7 @@ module DTK
       def data(*data_keys)
         data = self[DataField]
         case data_keys.size
-         when 0 then data
+         when 0 then data||{}
          when 1 then data && data[internal_key_form(data_keys.first)]
          else data_keys.map{|key|data && data[internal_key_form(key)]}.compact
         end
