@@ -198,9 +198,7 @@ module DTK
           def error_handling(opts={},&block)
             begin
               block.call
-            rescue ::RestClient::ResourceNotFound => e
-              Response.new(StatusField => StatusNotok, ErrorsField => errors_field('Resource not found'))
-            rescue  RestClient::Request::Unauthorized, RestClient::BadRequest,::RestClient::InternalServerError => e
+            rescue  ::RestClient::ResourceNotFound, RestClient::Request::Unauthorized, RestClient::BadRequest,::RestClient::InternalServerError => e
               # with latest set of changes we will consider this as special case since most of legacy code is expecting Response class
               errors = (safe_json_parse(e.response)||{})['errors']||errors_field('Server Error')
               Response.new(StatusField => StatusNotok, ErrorsField => errors)
