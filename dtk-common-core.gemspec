@@ -15,5 +15,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = "#{DtkCommonCore::VERSION}.#{ARGV[3]}".chomp(".")
 
-  gem.add_dependency 'rest-client','~> 1.6.7'
+  gem.add_dependency 'rest-client','~> 1.7.3'
 end
