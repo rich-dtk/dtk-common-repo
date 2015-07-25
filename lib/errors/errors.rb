@@ -15,7 +15,6 @@ module DTK
       super(msg,name)
       #TODO: might make default to be :log_error => false
       unless opts.has_key?(:log_error) and not opts[:log_error]
-        Log.info(to_s)
         if caller_info = opts[:caller_info]
           caller_depth = (caller_info.kind_of?(Hash) ? caller_info[:depth] : nil)||DefaultCallerDepth 
           Log.info_pp(caller[CallerOffset,caller_depth])
